@@ -19,6 +19,8 @@
 # include <cpptl/conststring.h>
 #endif
 #include <cstddef>    // size_t
+#include <iosfwd>
+#include <sstream>
 
 #define JSON_ASSERT_UNREACHABLE assert( false )
 #define JSON_ASSERT( condition ) assert( condition );  // @todo <= change this into an exception throw
@@ -668,6 +670,11 @@ Value::asString() const
    case intValue:
    case uintValue:
    case realValue:
+   {
+      std::ostringstream os;
+      os << ((type_ == intValue) ? value_.int_ : (type_ == uintValue) ? value_.uint_ : value_.real_);
+      return os.str();
+   }
    case arrayValue:
    case objectValue:
       JSON_FAIL_MESSAGE( "Type is not convertible to string" );
